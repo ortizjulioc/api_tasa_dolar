@@ -79,10 +79,10 @@ app.get("/", (req: Request, res: Response) => {
     <body>
       <div class="container">
         <h1>API Tasa Dólar RD</h1>
-        <p>Bienvenido a la API no oficial para consultar las tasas de cambio del dólar en República Dominicana.</p>
+        <p>Bienvenido a la API para consultar las tasas de cambio del dólar en República Dominicana.</p>
         <div class="endpoint">GET /api/dolar</div>
         <br>
-        <a href="/api/dolar" class="btn">Probar Endpoint</a>
+        <a href="/api/dolar" class="btn">Ir al Endpoint</a>
       </div>
     </body>
     </html>
