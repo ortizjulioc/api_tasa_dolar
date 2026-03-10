@@ -1,11 +1,22 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
+import { rateLimit } from "express-rate-limit";
 import { fetchDolarData } from "./scraper.js"; // Needs .js extension if module: NodeNext
 import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
 app.use(cors()); // Permite que tu frontend de Next.js consuma esto
+
+const limiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minuto
+  max: 100, // Límite de 100 peticiones por IP por cada ventana de tiempo (1 minuto)
+  message: { error: "Demasiadas peticiones desde esta IP, por favor intenta de nuevo después de un minuto" },
+  standardHeaders: true, // Retorna los headers de RateLimit en la respuesta
+  legacyHeaders: false, // Deshabilita los headers `X-RateLimit-*`
+});
+
+app.use(limiter);
 
 app.get("/", (req: Request, res: Response) => {
   const htmlContent = `
