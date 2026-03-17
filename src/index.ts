@@ -120,8 +120,10 @@ app.get("/api/dolar", async (req: Request, res: Response) => {
       promedio: promedioObj,
       bancos:
         promedioIndex !== -1
-          ? data.filter((_, i) => i !== promedioIndex)
-          : data,
+          ? data
+              .filter((_, i) => i !== promedioIndex)
+              .filter((b) => !b.entidad.toLowerCase().includes("popular"))
+          : data.filter((b) => !b.entidad.toLowerCase().includes("popular")),
     };
 
     res.json(response);
