@@ -6,6 +6,11 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
+
+// 🚨 CONFIGURACIÓN CRÍTICA PARA DOKPLOY / PROXIES
+// Le dice a Express que confíe en las cabeceras X-Forwarded-For que envía el proxy
+app.set("trust proxy", 1); 
+
 app.use(cors()); // Permite que tu frontend de Next.js consuma esto
 
 const limiter = rateLimit({
