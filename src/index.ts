@@ -108,27 +108,13 @@ app.get("/", (req: Request, res: Response) => {
 
 app.get("/api/dolar", async (req: Request, res: Response) => {
   try {
-    const data = await fetchDolarData();
-
-    // Separamos el promedio si lo necesitas
-    const promedioIndex = data.findIndex((b) =>
-      b.entidad.toLowerCase().includes("promedio"),
-    );
-
-    let promedioObj = promedioIndex !== -1 ? data[promedioIndex] : null;
-    if (promedioObj) {
-      promedioObj.entidad = "Promedio General";
-    }
+    const { promedio, promedioBancoCentral, banks } = await fetchDolarData();
 
     const response = {
       timestamp: new Date(),
-      promedio: promedioObj,
-      bancos:
-        promedioIndex !== -1
-          ? data
-              .filter((_, i) => i !== promedioIndex)
-              .filter((b) => !b.entidad.toLowerCase().includes("popular"))
-          : data.filter((b) => !b.entidad.toLowerCase().includes("popular")),
+      promedio,
+      promedioBancoCentral,
+      bancos: banks,
     };
 
     res.json(response);
