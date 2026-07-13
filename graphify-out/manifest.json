@@ -1,0 +1,32 @@
+{
+  ".claude/settings.local.json": {
+    "mtime": 1783948838.440088,
+    "ast_hash": "4c0565792e604934524eebd6ba161d62",
+    "semantic_hash": "4c0565792e604934524eebd6ba161d62"
+  },
+  "package.json": {
+    "mtime": 1779372836.1388953,
+    "ast_hash": "5d35ca5dfc74678944a7306bf3cdf902",
+    "semantic_hash": "5d35ca5dfc74678944a7306bf3cdf902"
+  },
+  "src/index.ts": {
+    "mtime": 1781269138.8306646,
+    "ast_hash": "4546bd06a791f0ad9cf055a4b7bec428",
+    "semantic_hash": "4546bd06a791f0ad9cf055a4b7bec428"
+  },
+  "src/scraper.ts": {
+    "mtime": 1783522830.453182,
+    "ast_hash": "3959f0290f165389b2fb596ca08398ab",
+    "semantic_hash": "3959f0290f165389b2fb596ca08398ab"
+  },
+  "tsconfig.json": {
+    "mtime": 1779372836.1409652,
+    "ast_hash": "98ca62f0d0e20e47a660a2a0c488f415",
+    "semantic_hash": "98ca62f0d0e20e47a660a2a0c488f415"
+  },
+  "C\uf03atemptasa.html": {
+    "mtime": 1781268985.6367073,
+    "ast_hash": "139d1ef8ca8a475d9afc2c183bc671c4",
+    "semantic_hash": "139d1ef8ca8a475d9afc2c183bc671c4"
+  }
+}
