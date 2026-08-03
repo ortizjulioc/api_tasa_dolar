@@ -108,12 +108,12 @@ app.get("/", (req: Request, res: Response) => {
 
 app.get("/api/dolar", async (req: Request, res: Response) => {
   try {
-    const { promedio, promedioBancoCentral, banks } = await fetchDolarData();
+    const { promedio, tasaBancoCentral, banks } = await fetchDolarData();
 
     const response = {
       timestamp: new Date(),
       promedio,
-      promedioBancoCentral,
+      tasaBancoCentral,
       bancos: banks,
     };
 
