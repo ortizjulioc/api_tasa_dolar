@@ -9,7 +9,7 @@ export interface BankData {
 
 export interface DolarData {
   promedio: BankData | null;
-  promedioBancoCentral: BankData | null;
+  tasaBancoCentral: BankData | null;
   banks: BankData[];
 }
 
@@ -50,7 +50,7 @@ export const fetchDolarData = async (): Promise<DolarData> => {
   if (!entries) throw new Error("No se encontró initialData en la página");
 
   let promedio: BankData | null = null;
-  let promedioBancoCentral: BankData | null = null;
+  let tasaBancoCentral: BankData | null = null;
   const banks: BankData[] = [];
 
   for (const entry of entries) {
@@ -63,16 +63,50 @@ export const fetchDolarData = async (): Promise<DolarData> => {
 
     const name = entry.entidad.toLowerCase();
 
-    if (name.includes("promedio") && name.includes("general")) {
+    // La fuente usa un flag estructural `isOfficial` para marcar la tasa del
+    // Banco Central; no depender solo del texto de "entidad", que la página
+    // cambia de vez en cuando (antes decía "Promedio Banco Central", ahora
+    // "Banco Central de la República Dominicana" y ya no es un promedio).
+    const isBancoCentral =
+      entry.isOfficial === true ||
+      (name.includes("banco") && name.includes("central"));
+
+    if (isBancoCentral) {
+      item.entidad = "Banco Central de la República Dominicana";
+      tasaBancoCentral = item;
+    } else if (name.includes("promedio")) {
       item.entidad = "Promedio General";
       promedio = item;
-    } else if (name.includes("promedio") && name.includes("central")) {
-      item.entidad = "Promedio Banco Central";
-      promedioBancoCentral = item;
     } else {
       banks.push(item);
     }
   }
 
-  return { promedio, promedioBancoCentral, banks };
+  // La fuente dejó de enviar una fila "Promedio General" dentro de initialData
+  // (lo confirmamos viendo el payload real: ya no aparece ninguna entidad con
+  // "promedio" en el arreglo). En vez de depender de que la vuelvan a incluir,
+  // lo calculamos nosotros mismos a partir de los bancos individuales, que es
+  // justo lo que este campo debe representar.
+  if (!promedio && banks.length > 0) {
+    const compraAvg =
+      banks.reduce((sum, b) => sum + b.compra, 0) / banks.length;
+
+    // Algunas entidades reportan venta en 0 (dato incompleto de la fuente);
+    // se excluyen para no distorsionar el promedio de venta hacia abajo.
+    const bancosConVenta = banks.filter((b) => b.venta > 0);
+    const ventaAvg =
+      bancosConVenta.length > 0
+        ? bancosConVenta.reduce((sum, b) => sum + b.venta, 0) /
+          bancosConVenta.length
+        : 0;
+
+    promedio = {
+      entidad: "Promedio General",
+      compra: Math.round(compraAvg * 100) / 100,
+      venta: Math.round(ventaAvg * 100) / 100,
+      variacion: "",
+    };
+  }
+
+  return { promedio, tasaBancoCentral, banks };
 };
