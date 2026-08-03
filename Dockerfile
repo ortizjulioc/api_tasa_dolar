@@ -9,6 +9,9 @@ RUN npm run build
 # Etapa 2: Producción
 FROM node:20-alpine
 WORKDIR /app
+# bash no viene por defecto en alpine; se agrega para poder usar
+# la terminal/exec de Dokploy dentro del contenedor
+RUN apk add --no-cache bash
 COPY package*.json ./
 # Solo instalamos dependencias de producción
 RUN npm install --omit=dev
